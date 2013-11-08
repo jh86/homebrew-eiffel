@@ -28,18 +28,12 @@ class Eiffelstudio < Formula
       #!/bin/sh
       export ISE_EIFFEL=#{prefix}
       export ISE_PLATFORM=#{arch}
-#      export PKG_CONFIG_PATH=/opt/X11/lib/pkgconfig
+      export PKG_CONFIG_PATH=/opt/X11/lib/pkgconfig
       #{prefix}/studio/spec/#{arch}/bin/estudio "$@"
     EOS
   end
 
   def install
-    if build.head?
-      es_version = '73'
-    else
-      es_version = (version.to_s.split('.'))[0..1].join
-    end
-    system "echo #{es_version}; exit 1"
     arch = (MacOS.prefer_64_bit? ? "macosx-x86-64" : "macosx-x86")
 
     if build.head?
@@ -47,6 +41,9 @@ class Eiffelstudio < Formula
         ENV['ISE_PLATFORM'] = arch
         system "./quick_configure"
       end
+      es_version = '73'
+    else
+      es_version = (version.to_s.split('.'))[0..1].join
     end
 
     # need pkg-config for X/GTK things
